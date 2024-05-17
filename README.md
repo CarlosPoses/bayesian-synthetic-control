@@ -2,7 +2,7 @@
 
 This research archive contains all the necessary information (code and data) to reproduce all results of the thesis of Carlos Gonzalez Poses. In the main text of the theses, this research archive is also refered to as 'Online Supplementary Material'.
 
-This thesis consists of 1) an extensive simulation study using R and Stan, aimed at comparing the newly developed (explained in the manuscript) Horseshoe Simplex Priors BSCM and Horseshoe Priors BSCM to the Standard Synthetic Control Method; and 2) a (much smaller) reanalysis of data originally presented in Abadie et al. (2010) using the Horseshoe Simplex BSCM and the Horsesheo Simplex Priros BSCM. There are 4 folders: code, sim-output, data, and figures. An overview of the contents of each folder follows.
+The thesis consists of 1) an extensive simulation study using R and Stan, aimed at comparing the newly developed - detailed in the manuscript - Horseshoe Simplex Priors BSCM and Horseshoe Priors BSCM to the Standard Synthetic Control Method; and 2) a (much smaller) reanalysis of data originally presented in Abadie et al. (2010) using the Horseshoe Simplex BSCM and the Horsesheo Simplex Priros BSCM. There are 4 folders: code, sim-output, data, and figures. An overview of the contents of each folder follows.
 
 ## Content of each folder
 
@@ -11,26 +11,21 @@ This thesis consists of 1) an extensive simulation study using R and Stan, aimed
   - 'simulation-post-processing' includes all information needed to summarize the 56000 simulation files to 7 datasets that are easier to handle, described in "code/detailed-description.md"
   - 'stan' contains the .stan files for the two bayesian models.
   - 'analysis-and-figures' contains the code needed to reproduce all main analysis and figures of the paper.
-Additionally, code includes the 'detailed-description.md' file, including a description of every script, as well as how to run them in order to reproduce the results.
+Additionally, the folder includes the 'detailed-description.md' file, including a description of every script, as well as how to run them in order to reproduce the results.
 2. **sim-output** contains the simulation output. It has two folders:
-  - 'complete-simulation-files' includes all the 56000 files (one per iteration) that result of running the simulation
-  - 'processed-simulation-results' includes 7 .Rda files that summarize information of the 56000 files, as described in "code/detailed-description.md"
-3. **data** contains the data file from Abadie et al. (2010). The data file was retrieved from the CRAN package 'tidysynth' (Dunford, 2023) and is available online.
-4. **figures** contains the figures that summarize the results. All this figures can be recreated using the scripts in **code**, following instructions detailed in "code/detailed-description.md".
-    It includes three subfolders:
-    - 'main text': contains all the figures included in the main text
-    - 'online supplementary material' contains all figures that were mentioned in the text as be part of the online supplementary material.
-       These figures provide results of different performance metrics in each condition. Concretely, there are 4 subfolders:
-        - 'coverage': contains all the figures that display coverage, for both bayesian methods, in each condition.
-        - 'causal effects': contains the distribution of causal effects (replication of Figure 3 and 4 in the main text) for each of the 56 simulation conditions. 
-          It includes the figures using the 'median' as a point estimate (causal_effects/median) and the mean as a point estimate (causal_effects/mean). It also includes the figures taking the counterfactual at each time point as estimand of interest 'conterfactual_time_point', and the average treatment effect in the postintervention period 'counterfactual_average'.
-        - 'weights_sparsity' includes the figures that reproduce the figure in Appendix 2 for all conditions
+  - 'complete-simulation': this folder is *empty* in the shared repo, due to lack of space. It should include 56000 files (one per iteration) created by the simulation code. If you want a copy of these files, plese email me, and I will be happy to share it.
+  - 'processed-simulation-results' includes 7 .rda files that summarize and structure the information of the 56000 files, as described in "code/detailed-description.md". These files are included, and they are the only files necessary to reproduce the main results and figures from the text.
+3. **data** contains the data file from Abadie et al. (2010). The data file was retrieved from the CRAN package 'tidysynth' (Dunford, 2023), available online at https://github.com/edunford/tidysynth/tree/master/data.
+4. **plots** contains the figures that summarize the results. All these figures can be recreated using the scripts in **code**, following instructions detailed in "code/detailed-description.md". 
+    It includes four subfolders:
+    - 'manuscript_figures': contains all the figures included in the main text
+    - 'coverage': contains all the figures that display coverage, for both bayesian methods, in each condition.
+    - 'causal effects': contains the distribution of causal effects (replication of Figure 3 and 4 in the main text) for each of the 56 simulation conditions. It includes the figures using the 'median' as a point estimate (causal_effects/median) and the mean as a point estimate (causal_effects/mean). It also includes the figures taking the counterfactual at each time point as estimand of interest 'conterfactual_time_point', and the average treatment effect in the postintervention period 'average_counterfactual'.
+    - 'weights_sparsity' includes the figures that reproduce the figure in Appendix 2 for all conditions
 
-## Permision and access
+## Reproducibility
 
-Access is granted to the author of this research archive (Carlos González Poses), his thesis supervisors (Oisín Ryan and Erik-Jan van Kesteren), the course coordinator (Emmeke Aarts), and the second grader (Rebecca Kuiper). In addition, access is granted to the personnel of the Faculty of Social and Behavioural Sciences that could need access to it (i.e., to verify its existence). Access is granted only for the time necessary to grade the Research archive, i.e., no late than the 31st of May 2024. Reproduction of the materials is not allowed in any format without explicit permission of the author of the research archive (Carlos González Poses).
-
-Carlos González Poses is solely responsible for this Research Archive. In case of questions or consultations, please contact the responsible person at c.gonzalezposes@uu.nl or carlosgonzalezposes@gmail.com
+In order to reproduce the results, make sure to check the "requirements.txt" as well as the instrictuons in "code/detailed_description.md".
 
 ## Ethics
 
@@ -39,8 +34,12 @@ This thesis has received ethical approval by the Ethics Review Board of the Facu
 For the simulation part of the study, ethical approval was received with number: 23-1877.
 For the extension to the simulation (the reanalysis of data from Abadie et al. 2010), ethical approval was received with number: 24-1720
 
-Note that the simulation is based on data that is entirely generated by us. There is no data on any individual, meaning no sensitive or personal data can be disclosed.
-Additionally, for the reanalysis of data from Abadie et al. (2010), the data is public data at an aggregate level: it shows data at the level of the state of some states of the United States of America (e.g., percent of young people, cigarette sales per capita, alcohol consumption per capita). All data is aggregated at the state level, i.e., there is no data whatsoever of any individual. The data was already in the public domain with a MIT licence. The dataset we used was retrieved from the open documentation of the R package tidysynth (https://cran.r-project.org/web/packages/tidysynth/index.html)
+Note that the simulation is based on data that is entirely generated by us. There is no data on any individual, meaning no sensitive or personal data is disclosed. Additionally, for the reanalysis of data from Abadie et al. (2010), the data is at the level of the state, for some states of the United States of America (e.g., percent of young people, cigarette sales per capita, alcohol consumption per capita). All data is aggregated at the state level, i.e., there is no data whatsoever of any individual. The data was already in the public domain with a MIT licence via the tidysnth package. The dataset we used was retrieved from the open documentation of the R package tidysynth (https://cran.r-project.org/web/packages/tidysynth/index.html)
+
+## Contact
+
+Carlos G. Poses is solely responsible for this Research Archive. If you have a question or a consultation, please contact me at c.gonzalezposes@uu.nl or carlosgonzalezposes@gmail.com
+
 
 ## References
 
