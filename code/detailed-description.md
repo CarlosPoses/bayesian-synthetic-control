@@ -1,4 +1,4 @@
-This file contains detailed information about the content of each script in 'code'.
+This file contains detailed information about the content of each folder and script within 'code'.
 
 In order to reproduce the manuscript results, one should need to run, in the following folder: 1) the script 'run-simulation/05-exec.simulation.R; 2) all the scripts in the simulation-post-processing foldes (script 01 first, followed by script 02 second); 3) all scripts in the analysis-and-figures folder (the order in which the script within this folder are run is irrelevant and will lead to the exact same results).
 
