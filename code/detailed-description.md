@@ -24,12 +24,19 @@ It includes two scripts, designed to input each of the unstructured individual f
    - 0.1.process-file-function.R: Contains a function that takes each of the created files and stores all the relevant information, in a structured format. Depending on the output specified as an argument, it returns: the simulation conditions for that file, the weights estimates, the counterfactual estimates, the value of the covariates, or the message and diagnostics. 
 
    - 0.2.create-processed-files.R: Creates the structured dataframes detailed below.
-	- Conditions.Rds: Contains information about the simulation conditions for each iteration and model file. Each row corresponds to one iteration, and each column is the value of the simulation condition.
-	- Covariates.Rds: Contains information about the covariates values for each iteration and model file. Each row corresponds to one iteration, and each volumn represents covariate values.
-	- Effects.Rds: Contains information about the counterfactual and counterfactual estimates. Each row corresponds to one time point. Colums correspond to the different true and estimated counterfactuals, including credible intervals for Bayesian models, as well as mean and median point estimates.
+
+   	- conditions.Rds: Contains information about the simulation conditions for each iteration and model file. Each row corresponds to one iteration, and each column is the value of the simulation condition.
+
+	- covariates.Rds: Contains information about the covariates values for each iteration and model file. Each row corresponds to one iteration, and each volumn represents covariate values.
+
+	- effects.Rds: Contains information about the counterfactual and counterfactual estimates. Each row corresponds to one time point. Colums correspond to the different true and estimated counterfactuals, including credible intervals for Bayesian models, as well as mean and median point estimates.
+
 	- mess_and_diag.Rds: Contains the value of messages and diagnostics for each iteration. It is a list, where each element corresponds to one iteration, and the elements inside it are every message and diagnostic returned for that iteration.
-	- possibly-synth.R: Contains information about for which iterations a convex combination of untreated units can reproduce the treated unit, i.e., for which iterations a synthetic control is possible. Each row is one iteration, and the columns indicate whether a simulation value was possible or not.
+
+	- possibly-synth.Rds: Contains information about for which iterations a convex combination of untreated units can reproduce the treated unit, i.e., for which iterations a synthetic control is possible. Each row is one iteration, and the columns indicate whether a simulation value was possible or not.
+
 	- pretreatment_outcomes.Rds: Contains information about the pretreatment outcomes in each condition. Each row corresponds to one preintervention time-point.
+ 
 	- weights.Rds: Contains information about the unit weights in each condition. Each row correspond to a unit, and each column corresponds to the estimate according to different bayesian models (including credible intervals and different point estimates), or the Standard SCM.
 
 All files contain a column 'file_name', used to refer to the file_name where the information was retrieved from. This is useful to to merge different dataframes. The files for which there was an error are excluded in the create-processed-files.R script.
