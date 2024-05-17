@@ -43,6 +43,7 @@ Carlos G. Poses is solely responsible for this Research Archive. If you have a q
 
 ## References
 
-Dunford E (2023). _tidysynth: A Tidy Implementation of the Synthetic Control Method_. R
+- Dunford E (2023). _tidysynth: A Tidy Implementation of the Synthetic Control Method_. R
   package version 0.2.0, <https://CRAN.R-project.org/package=tidysynth>.
-Abadie, A., Diamond, A., & Hainmueller, J. (2010). Synthetic control methods for comparative case studies: Estimating the effect of California’s tobacco control program. Journal of the American statistical Association, 105(490), 493-505.
+  
+- Abadie, A., Diamond, A., & Hainmueller, J. (2010). Synthetic control methods for comparative case studies: Estimating the effect of California’s tobacco control program. Journal of the American statistical Association, 105(490), 493-505.
