@@ -1,4 +1,4 @@
-This file contains detailed information about the content of each script in 'code'.
+This file contains detailed information about the content of each folder and script within 'code'.
 
 In order to reproduce the manuscript results, one should need to run, in the following folder: 1) the script 'run-simulation/05-exec.simulation.R; 2) all the scripts in the simulation-post-processing foldes (script 01 first, followed by script 02 second); 3) all scripts in the analysis-and-figures folder (the order in which the script within this folder are run is irrelevant and will lead to the exact same results).
 
@@ -24,12 +24,19 @@ It includes two scripts, designed to input each of the unstructured individual f
    - 0.1.process-file-function.R: Contains a function that takes each of the created files and stores all the relevant information, in a structured format. Depending on the output specified as an argument, it returns: the simulation conditions for that file, the weights estimates, the counterfactual estimates, the value of the covariates, or the message and diagnostics. 
 
    - 0.2.create-processed-files.R: Creates the structured dataframes detailed below.
-	- Conditions.Rds: Contains information about the simulation conditions for each iteration and model file. Each row corresponds to one iteration, and each column is the value of the simulation condition.
-	- Covariates.Rds: Contains information about the covariates values for each iteration and model file. Each row corresponds to one iteration, and each volumn represents covariate values.
-	- Effects.Rds: Contains information about the counterfactual and counterfactual estimates. Each row corresponds to one time point. Colums correspond to the different true and estimated counterfactuals, including credible intervals for Bayesian models, as well as mean and median point estimates.
+
+   	- conditions.Rds: Contains information about the simulation conditions for each iteration and model file. Each row corresponds to one iteration, and each column is the value of the simulation condition.
+
+	- covariates.Rds: Contains information about the covariates values for each iteration and model file. Each row corresponds to one iteration, and each volumn represents covariate values.
+
+	- effects.Rds: Contains information about the counterfactual and counterfactual estimates. Each row corresponds to one time point. Colums correspond to the different true and estimated counterfactuals, including credible intervals for Bayesian models, as well as mean and median point estimates.
+
 	- mess_and_diag.Rds: Contains the value of messages and diagnostics for each iteration. It is a list, where each element corresponds to one iteration, and the elements inside it are every message and diagnostic returned for that iteration.
-	- possibly-synth.R: Contains information about for which iterations a convex combination of untreated units can reproduce the treated unit, i.e., for which iterations a synthetic control is possible. Each row is one iteration, and the columns indicate whether a simulation value was possible or not.
+
+	- possibly-synth.Rds: Contains information about for which iterations a convex combination of untreated units can reproduce the treated unit, i.e., for which iterations a synthetic control is possible. Each row is one iteration, and the columns indicate whether a simulation value was possible or not.
+
 	- pretreatment_outcomes.Rds: Contains information about the pretreatment outcomes in each condition. Each row corresponds to one preintervention time-point.
+ 
 	- weights.Rds: Contains information about the unit weights in each condition. Each row correspond to a unit, and each column corresponds to the estimate according to different bayesian models (including credible intervals and different point estimates), or the Standard SCM.
 
 All files contain a column 'file_name', used to refer to the file_name where the information was retrieved from. This is useful to to merge different dataframes. The files for which there was an error are excluded in the create-processed-files.R script.
@@ -42,11 +49,13 @@ Contains two stan files corresponding to each Bayesian model. 'horseshoe.stan' i
 
 This folder contains scripts to analyze the simulation results. All the analysis are based on one of the data folders in sim-output/processed_results. The scripts are the following.
 
-  -0.1. load-data.R. A script that loads all the dataframes into sim-putput/processed_results into R (to simplify other scripts, anda avoid repetitions)
-  -0.2. analysis-functions.R. Includes three functions. One function computes the differences between observed and estimated counterfactuals. This is later used to compute bias and RMSE for different conditions. The other two functions are helpers to label the grids or titles of ggplot2 objects, for each condition.
-  -0.3.count-number-possible-solutions.R: Short script that counts the sample size of each simulation condition
-  -04.replicate-synth-california.qmd. This .qmd files documents our attempt and partial failure replicate the results in Abadie et al using the package Synth. It displays how the results change depending on a trivial change of the order of columns in the original dataframe, likely induced by a lack of convergence. We also include the rendered .html file.
+  - 0.1. load-data.R. A script that loads all the dataframes into sim-putput/processed_results into R (to simplify other scripts, anda avoid repetitions)
+  - 0.2. analysis-functions.R. Includes three functions. One function computes the differences between observed and estimated counterfactuals. This is later used to compute bias and RMSE for different conditions. The other two functions are helpers to label the grids or titles of ggplot2 objects, for each condition.
+  - 0.3.count-number-possible-solutions.R: Short script that counts the sample size of each simulation condition
+  - 04.replicate-synth-california.qmd. This .qmd files documents our attempt and partial failure replicate the results in Abadie et al using the package Synth. It displays how the results change depending on a trivial change of the order of columns in the original dataframe, likely induced by a lack of convergence. We also include the rendered .html file.
+  - 
 The subfolder 'figures' includes all scripts that create figures:
+
   - 01.plot-bias-rmse-twoconditions.R: includes the R code needed to reproduce figure 3 and 4.
   - 02.plots-bias-rmse-allconditions.R: includes the R code needed to reproduce figures 3 and 4, in the form of a facet, for all conditions.
   - 03.replicate_individuals_iterations.R: includes the R code needed to reproduce figures 2 and 3 of the manuscript
