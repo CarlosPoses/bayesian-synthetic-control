@@ -1,0 +1,196 @@
+---
+title: "synth_bug"
+format: 
+  html:
+    embed-resources: true
+editor: source
+---
+
+## 
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+library(tidysynth)
+california <- readRDS("../../data/proposition99.rds")
+```
+
+# Create data objects (X0, X1, Y0, Y1)
+```{r }
+# Compute the mean of the covariates
+covariates <- california |> 
+  filter(year <= 1988,
+         year >= 1980) |> 
+  select(-year, -cigsale) |> 
+  group_by(state) |> 
+  mutate(across(everything(), ~mean(.x, na.rm = TRUE))) |> 
+  unique() |> 
+  pivot_longer(
+    cols = c(lnincome, beer, age15to24, retprice), names_to= "variable", values_to = "value") 
+
+# Grab 3 lags of the variables
+lags <- california |> 
+  select(cigsale, year, state) |> 
+  filter(year == 1975 | year == 1980 | year == 1988) |> 
+  mutate(variable = paste0("cigsale", year),
+         value = cigsale) |> 
+  select(-cigsale, -year)
+
+# Combine into X
+X <- rbind(covariates, lags) 
+X1 <- X |> filter(state == "California") |> ungroup() |>  select(-state)
+X0 <- X |> filter(state != "California") 
+X1 <- as.matrix(X1$value, ncol = 1)
+
+X0 <- X0 |> pivot_wider(names_from = state,
+              values_from = value)  |> 
+  select(-variable) |> 
+  as.matrix() 
+
+
+# Preintervention outcomes
+Y0 <- california |> 
+  filter(state != "California") |> 
+  select(cigsale, state, year) |> 
+  pivot_wider(names_from = state, values_from = cigsale) |> 
+  select(-year) |>
+  as.matrix()
+Y1 <- california |>
+  filter(state == "California") |> 
+  select(cigsale) |> 
+  as.matrix(ncol = 1)
+
+Y0_pre <- Y0[1:19, ]
+Y1_pre <- Y1[1:19, ] |> as.matrix(ncol = 1)
+Y0_post <- Y0[20:nrow(Y0), ]
+Y1_post <- Y1[20:nrow(Y1), ]
+```
+
+# Make a trivial change in data object X0: change order of columns
+
+```{r}
+X0_trivially_changed <- X0[, sort(colnames(X0))]
+Y0_pre_trivially_changed <- Y0_pre[, sort(colnames(Y0))]
+
+```
+
+# Create dataprep object
+```{r}
+# The dataprep object needs the state column to be a numerical, not a factor os string, so I change that. Also, it only accepts dataframes, not tibbles
+california <- readRDS("../../data/proposition99.rds")
+
+states <- unique(california$state)
+states_names <- data.frame(state = states, unit.num = 1:length(states))
+
+california <- california |> 
+  left_join(states_names, by = "state") |> 
+  as.data.frame()
+
+dataprep_object <- Synth::dataprep(foo = california, predictors = c("lnincome", "beer", "age15to24", "retprice"),
+         predictors.op = "mean", dependent = "cigsale", unit.variable = 8,
+         time.variable = "year", special.predictors = list(
+      list("cigsale", 1975, "mean"),
+      list("cigsale", 1980, "mean"),
+      list("cigsale", 1988, "mean")),
+      treatment.identifier = 18, controls.identifier = c(1:17, 19:39),
+      time.predictors.prior = c(1980:1988), time.optimize.ssr = 1970:1988)
+
+
+```
+
+# Estimate Synth with dataprep, my original data, my trivially changed data
+
+```{r}
+library(Synth)
+
+synth <- Synth::synth(X1 = X1, X0 = X0, Z1 = Y1_pre, Z0 = Y0_pre,
+             custom.v = NULL, optimixmethod = c("Nelder-Mead", "BFGS"), genoud = FALSE,
+             quadopt = "ipop", Margin.ipop = 5e-04, Sig.ipop = 5, Bound.ipop = 10, verbose = TRUE)
+
+synth_trivially_changed <- Synth::synth(X1 = X1, X0 = X0_trivially_changed, Z1 = Y1_pre, Z0 = Y0_pre_trivially_changed,
+             custom.v = NULL, optimixmethod = c("Nelder-Mead", "BFGS"), genoud = FALSE,
+             quadopt = "ipop", Margin.ipop = 5e-04, Sig.ipop = 5, Bound.ipop = 10, verbose = TRUE)
+
+synth_dataprep <- Synth::synth(dataprep_object,
+             optimixmethod = c("Nelder-Mead", "BFGS"), verbose = TRUE)
+
+synth_dataprep$solution.w
+options(scipen=999)
+synth$solution.w
+synth_trivially_changed$solution.w
+# To check which states this solution corresponds to, you need to check what state corresponds to each name in the states_names dataframe
+synth_dataprep$solution.w
+weights <- data.frame(synth = as.numeric(synth$solution.w), synth_trivially_changed = as.numeric(synth_trivially_changed$solution.w),
+                      synth_dataprep = as.numeric(synth_dataprep$solution.w))
+
+print(weights)
+```
+## Restimate wihout variable weights
+```{r}
+equal_v <- rep(1, nrow(X0))
+
+library(Synth)
+
+synth <- Synth::synth(X1 = X1, X0 = X0, Z1 = Y1_pre, Z0 = Y0_pre,
+             custom.v = equal_v, optimixmethod = c("Nelder-Mead", "BFGS"), genoud = FALSE,
+             quadopt = "ipop", Margin.ipop = 5e-04, Sig.ipop = 5, Bound.ipop = 10, verbose = TRUE)
+
+synth_trivially_changed <- Synth::synth(X1 = X1, X0 = X0_trivially_changed, Z1 = Y1_pre, Z0 = Y0_pre_trivially_changed,
+             custom.v = equal_v, optimixmethod = c("Nelder-Mead", "BFGS"), genoud = FALSE,
+             quadopt = "ipop", Margin.ipop = 5e-04, Sig.ipop = 5, Bound.ipop = 10, verbose = TRUE)
+
+synth_dataprep <- Synth::synth(dataprep_object,
+                               custom.v = equal_v,
+             optimixmethod = c("Nelder-Mead", "BFGS"), genoud = FALSE,
+             quadopt = "ipop", Margin.ipop = 5e-04, Sig.ipop = 5, Bound.ipop = 10, verbose = TRUE)
+
+options(scipen=999)
+synth
+synth_trivially_changed
+synth_dataprep
+# To check which states this solution corresponds to, you need to check what state corresponds to each name in the states_names dataframe
+synth_dataprep$solution.w
+weights <- data.frame(synth = as.numeric(synth$solution.w), synth_trivially_changed = as.numeric(synth_trivially_changed$solution.w),
+                      synth_dataprep = as.numeric(synth_dataprep$solution.w))
+```
+# Empty the names
+```{r}
+colnames(X0) <- NULL
+colnames(X1) <- NULL
+colnames(Y0_pre) <- NULL
+colnames(Y1_pre) <- NULL
+colnames(X0_trivially_changed) <- NULL
+colnames(Y0_pre_trivially_changed) <- NULL
+
+
+synth <- Synth::synth(X1 = X1, X0 = X0, Z1 = Y1_pre, Z0 = Y0_pre,
+             custom.v = NULL, optimixmethod = c("Nelder-Mead", "BFGS"), genoud = FALSE,
+             quadopt = "ipop", Margin.ipop = 5e-04, Sig.ipop = 5, Bound.ipop = 10, verbose = TRUE)
+
+synth_trivially_changed <- Synth::synth(X1 = X1, X0 = X0_trivially_changed, Z1 = Y1_pre, Z0 = Y0_pre_trivially_changed,
+             custom.v = NULL, optimixmethod = c("Nelder-Mead", "BFGS"), genoud = FALSE,
+             quadopt = "ipop", Margin.ipop = 5e-04, Sig.ipop = 5, Bound.ipop = 10, verbose = TRUE)
+
+
+
+set.seed(559) # 559
+order <- sample(1:ncol(X0), ncol(X0), replace = FALSE)
+X0_trivially_changed2 <- X0[, order]
+Y0_pre_trivially_changed2 <- Y0_pre[, order]
+
+synth_trivially_changed2 <- Synth::synth(X1 = X1, X0 = X0_trivially_changed2, Z1 = Y1_pre, Z0 = Y0_pre_trivially_changed2,
+             custom.v = NULL, optimixmethod = c("Nelder-Mead", "BFGS"), genoud = FALSE,
+             quadopt = "ipop", Margin.ipop = 5e-04, Sig.ipop = 5, Bound.ipop = 10, verbose = TRUE)
+
+synth
+synth_trivially_changed2
+synth_trivially_changed
+
+```
+
+
+
+
+
+
+
