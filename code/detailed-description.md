@@ -53,7 +53,9 @@ This folder contains scripts to analyze the simulation results. All the analysis
   - 0.2. analysis-functions.R. Includes three functions. One function computes the differences between observed and estimated counterfactuals. This is later used to compute bias and RMSE for different conditions. The other two functions are helpers to label the grids or titles of ggplot2 objects, for each condition.
   - 0.3.count-number-possible-solutions.R: Short script that counts the sample size of each simulation condition
   - 04.replicate-synth-california.qmd. This .qmd files documents our attempt and partial failure replicate the results in Abadie et al using the package Synth. It displays how the results change depending on a trivial change of the order of columns in the original dataframe, likely induced by a lack of convergence. We also include the rendered .html file.
+  - 
 The subfolder 'figures' includes all scripts that create figures:
+
   - 01.plot-bias-rmse-twoconditions.R: includes the R code needed to reproduce figure 3 and 4.
   - 02.plots-bias-rmse-allconditions.R: includes the R code needed to reproduce figures 3 and 4, in the form of a facet, for all conditions.
   - 03.replicate_individuals_iterations.R: includes the R code needed to reproduce figures 2 and 3 of the manuscript
