@@ -1,5 +1,5 @@
 #### R PACKAGES
-The packages, and package versions, needed to reproduce this results are:
+The R packages, and package versions, used to obtain the results were:
 
 ─ Packages ───────────────────────────────────────────────────────────────────────────────────────
  package        * version    date (UTC) lib source
@@ -87,15 +87,20 @@ The packages, and package versions, needed to reproduce this results are:
  xtable           1.8-4      2019-04-21 [1] CRAN (R 4.2.2)
 
 
+### Stan
+
+CmdstanR was using cmdstan version "2.34.1".
+
 #### R VERSION, SESSION INFO, AND TECHNICAL SPECIFICATIONS
 
-Additionally, the simulation ("code/run-simulation/05.exec-simulation.R") was ran on a computer with the following configuration and R session info:
+The simulation ("code/run-simulation/05.exec-simulation.R") was ran on a computer with the following operating system and R version:
 
 R version 4.2.3 (2023-03-15) -- "Shortstop Beagle"
 Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
-and the following technical specifications. 
+as well the following technical specifications. 
+
 CPU     :  2 x Intel(R) Xeon(R) CPU E5-2650 v4 @ 2.20GHz
 Threads :  48
 Memory  :  64GB
@@ -103,9 +108,11 @@ GPU     :  Nvidia GTX 1080Ti
 Storage :  Main disk : 2TB    WDC WD20EFRX-68EUZN0  /data
            OS disk   : 120GB  INTEL SSDSC2KW120H6   /
 
-Note that Stan is sensitive to very small configuration changes (such as the particular version of the C complier, exact version, or processor specifications). See more information on: https://mc-stan.org/docs/reference-manual/reproducibility.html). That means that perfectly reproducing results in a computer that does not have this exact specifications cannot be guaranteed. Additionally, the computation time on this computer was around 5.5 days. Thus, be aware that trying to reduce this simulation in a less powerful computer can be extremely time-consumig (we estimate a computational time of around 50 days on a standard personal laptop with 8 cores).
+All the simulation was run using parallel processing, as detailed in the code. Note that Stan is sensitive to very small configuration changes (such as the particular version of the C compiler, exact version, or processor specifications). See more information on: https://mc-stan.org/docs/reference-manual/reproducibility.html). That means that perfectly reproducing results in a computer that does not have this same exact specifications is not guaranteed. However, we would only expect minor differences, and differences that would not alter the conclusions. All the results that do not include running Stan models (i.e., excluding only the simulation) should be more easily reproducible on all operating systems, provided the same package versions and R configuration is used as indicated.
 
-The R Session information of the laptop where the rest of the analysis (everything except the simulation computation) were run is the following:
+Additionally, the computation time on this computer was around 5.5 days. Thus, be aware that trying to reduce this simulation in a less powerful computer can be extremely time-consuming. For reference, I estimate a execution time of around 50 days in my standard (Asus VivoBook, 8 cores) personal laptop. 
+
+The R Session information of the laptop where the rest of the analysis (everything except ""code/run-simulation/05.exec-simulation.R") was run is the following:
 
 ─ Session info ───────────────────────────────────────────────────────────────────────────────────
  setting  value
@@ -120,4 +127,4 @@ The R Session information of the laptop where the rest of the analysis (everythi
  date     2024-05-16
  rstudio  2023.12.1+402 Ocean Storm (desktop)
 
-All the results that do not include running Stan models (i.e., excluding only the simulation) should be reproducible on most operating systems, provided the same package versions and R configuration is used.
+
