@@ -12,8 +12,8 @@ The thesis consists of 1) an extensive simulation study using R and Stan, aimed 
   - 'stan' contains the .stan files for the two bayesian models.
   - 'analysis-and-figures' contains the code needed to reproduce all main analysis and figures of the paper.
 Additionally, the folder includes the 'detailed-description.md' file, including a description of every script, as well as how to run them in order to reproduce the results.
-2. **sim-output** contains the simulation output. It has two folders:
-  - 'complete-simulation': this folder is *empty* in the shared repo, due to lack of space. It should include 56000 files (one per iteration) created by the simulation code. If you want a copy of these files, plese email me, and I will be happy to share it.
+2. **sim-output** contains the simulation output. It has two folders (only one on Github):
+  - 'complete-simulation': this folder is *empty* in the on GitHub, due to lack of space. It should include 56000 files (one per iteration) created by the simulation code. If you want a copy of these files, plese email me, and I will be happy to share it.
   - 'processed-simulation-results' includes 7 .rda files that summarize and structure the information of the 56000 files, as described in "code/detailed-description.md". These files are included, and they are the only files necessary to reproduce the main results and figures from the text.
 3. **data** contains the data file from Abadie et al. (2010). The data file was retrieved from the CRAN package 'tidysynth' (Dunford, 2023), available online at https://github.com/edunford/tidysynth/tree/master/data.
 4. **plots** contains the figures that summarize the results. All these figures can be recreated using the scripts in **code**, following instructions detailed in "code/detailed-description.md". 
