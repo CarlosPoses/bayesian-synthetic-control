@@ -197,3 +197,5 @@ plot_annotation(tag_levels = "A") &
   theme(plot.tag = element_text(size = 90))
 
 ggsave(filename = "plots/manuscript_figures/figure1.png", plot = figure1, width = 18, height = 7)
+ggsave(filename = "plots/manuscript_figures/figure1_panela.png", plot = panel_a, width = 9, height = 7)
+ggsave(filename = "plots/manuscript_figures/figure1_panelb.png", plot = panel_b, width = 9, height = 7)
